@@ -1,97 +1,96 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "🏮 Axiore-Hub | Mega Samurai Update",
-   LoadingTitle = "Axiore Multi-Game Hub v3.0",
+   Name = "🏮 Axiore-Hub | FINAL GOD MODE",
+   LoadingTitle = "Samurai Operasyon Merkezi v4.0",
    LoadingSubtitle = "by Axiore",
    ConfigurationSaving = {Enabled = true, FolderName = "AxioreHub", FileName = "AxioreConfig"},
    KeySystem = false
 })
 
--- [[ GENEL HİLELER ]] --
-local MainTab = Window:CreateTab("🏠 Genel", 4483362458)
-MainTab:CreateSlider({
-   Name = "Hız", Range = {16, 500}, Increment = 1, CurrentValue = 16, Flag = "Spd", 
-   Callback = function(Value) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value end,
-})
-
--- [[ BLOX FRUITS SEKMESİ ]] --
-local BFWeb = Window:CreateTab("🌊 Blox Fruits", 4483362458)
-BFWeb:CreateSection("Farm & Fruit")
-BFWeb:CreateButton({
-   Name = "Meyveleri Otomatik Topla (Fruit Snatcher)",
+-- [[ 🚀 ADMIN KOMUTLARI (Infinite Yield) ]] --
+local AdminTab = Window:CreateTab("📜 Admin", 4483362458)
+AdminTab:CreateButton({
+   Name = "Infinite Yield Yükle (Yüzlerce Komut)",
    Callback = function()
-      for _,v in pairs(game.Workspace:GetChildren()) do
-          if v:IsA("Tool") and v:FindFirstChild("Handle") then
-              game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Handle.CFrame
-          end
-      end
-      Rayfield:Notify({Title = "İşlem Tamam", Content = "Yerlerdeki meyveler toplandı!", Duration = 2})
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
    end,
 })
 
--- [[ DOORS SEKMESİ ]] --
-local DoorsTab = Window:CreateTab("👁️ Doors", 4483362458)
-DoorsTab:CreateSection("Survival")
-DoorsTab:CreateToggle({
-   Name = "Rush/Ambush Uyarısı",
+-- [[ 🔫 SAVAŞ & AIMBOT (Forsaken/Combat) ]] --
+local CombatTab = Window:CreateTab("🔫 Savaş", 4483362458)
+CombatTab:CreateToggle({
+   Name = "Silent Aim (Otomatik Nişan)",
    CurrentValue = false,
    Callback = function(Value)
-      game.Workspace.ChildAdded:Connect(function(child)
-          if Value and (child.Name == "RushMoving" or child.Name == "AmbushMoving") then
-              Rayfield:Notify({Title = "DİKKAT!", Content = "YARATIK GELİYOR! HEMEN SAKLAN!", Duration = 5})
-          end
-      end)
+       _G.Aimbot = Value
+       game:GetService("RunService").RenderStepped:Connect(function()
+           if _G.Aimbot then
+               -- Buraya en yakın düşmana kilitlenme mantığı gelecek
+           end
+       end)
    end,
 })
 
--- [[ PET SIMULATOR SEKMESİ ]] --
-local PetTab = Window:CreateTab("🐱 Pet Sim", 4483362458)
-PetTab:CreateSection("Auto Clicker")
-PetTab:CreateToggle({
-   Name = "Auto Click (Paraları Topla)",
+-- [[ 👁️ GÖRÜNÜRLÜK (ESP) ]] --
+local VisualsTab = Window:CreateTab("👁️ Görünürlük", 4483362458)
+VisualsTab:CreateToggle({
+   Name = "Oyuncu İsimlerini Göster",
    CurrentValue = false,
    Callback = function(Value)
-      _G.AutoClick = Value
-      while _G.AutoClick do
-          -- Bu kısım simülatörlerde tıklama efektini tetikler
-          local VirtualInputManager = game:GetService('VirtualInputManager')
-          VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 1)
-          task.wait(0.1)
-      end
+       -- ESP Kodları buraya
    end,
 })
 
--- [[ FORSAKEN SEKMESİ ]] --
-local ForsakenTab = Window:CreateTab("⚔️ Forsaken", 4483362458)
-ForsakenTab:CreateButton({
-   Name = "En Yakın Düşmana Işınlan (Kill Aura)",
+-- [[ 🎮 OYUN SEKMELERİ (Blox Fruits / Doors / Pet Sim) ]] --
+local GamesTab = Window:CreateTab("🎮 Oyunlar", 4483362458)
+
+GamesTab:CreateSection("Blox Fruits")
+GamesTab:CreateButton({
+   Name = "Meyveleri Işınla (Fruit Snatcher)",
    Callback = function()
-      -- Basit Kill Aura Mantığı
-      local localPlayer = game.Players.LocalPlayer
-      for _, player in pairs(game.Players:GetPlayers()) do
-          if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-              localPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
-              break
-          end
-      end
+       for _,v in pairs(game.Workspace:GetChildren()) do
+           if v:IsA("Tool") and v:FindFirstChild("Handle") then
+               game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Handle.CFrame
+           end
+       end
    end,
 })
 
--- [[ GELİŞMİŞ UÇMA (FLY) ]] --
-local FlyTab = Window:CreateTab("✈️ Uçma", 4483362458)
+GamesTab:CreateSection("Doors")
+GamesTab:CreateToggle({
+   Name = "Yaratık Gelince Uyar",
+   CurrentValue = false,
+   Callback = function(Value)
+       -- Doors uyarısı
+   end,
+})
+
+-- [[ ✈️ HAREKET & UÇMA ]] --
+local MoveTab = Window:CreateTab("✈️ Hareket", 4483362458)
+MoveTab:CreateSlider({
+   Name = "Işık Hızı", Range = {16, 1000}, Increment = 10, CurrentValue = 16,
+   Callback = function(v) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v end,
+})
+
 local flying = false
-local speed = 50
-FlyTab:CreateToggle({
-   Name = "Uçuş Modu (Samurai Flight)",
+MoveTab:CreateToggle({
+   Name = "Samurai Flight (Uçuş)",
    CurrentValue = false,
    Callback = function(Value)
       flying = Value
-      local root = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+      local root = game.Players.LocalPlayer.Character.HumanoidRootPart
       game:GetService("RunService").Heartbeat:Connect(function()
-          if flying then root.Velocity = game.Workspace.CurrentCamera.CFrame.LookVector * speed end
+          if flying then root.Velocity = game.Workspace.CurrentCamera.CFrame.LookVector * 100 end
       end)
    end,
 })
 
-Rayfield:Notify({Title = "Axiore v3.0 Yüklendi!", Content = "Tüm oyun modları aktif edildi!", Duration = 5})
+-- [[ 🛠️ AYARLAR ]] --
+local SettingsTab = Window:CreateTab("⚙️ Ayarlar", 4483362458)
+SettingsTab:CreateButton({
+   Name = "Menüyü Kapat (Destroy)",
+   Callback = function() Rayfield:Destroy() end,
+})
+
+Rayfield:Notify({Title = "Axiore v4.0 YÜKLENDİ", Content = "Durdurulamaz güç elinde!", Duration = 5})
