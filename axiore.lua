@@ -1,37 +1,31 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+-- [[ AXIORE CUSTOM UI v1.0 ]] --
+local AxioreGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local SpeedBtn = Instance.new("TextButton")
 
--- OYUNUN KİMLİĞİNİ ÖĞRENMEK İÇİN LOGLARA YAZDIRALIM
-print("Axiore-Hub: Girdiğin Oyun ID: " .. tostring(game.PlaceId))
+-- Arayüzü Oluşturma
+AxioreGui.Name = "AxioreCustom"
+AxioreGui.Parent = game.CoreGui
 
-local GameID = game.PlaceId
-local GameName = "Genel Sunucu"
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = AxioreGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- Koyu Samurai Siyahı
+MainFrame.Position = UDim2.new(0.5, -100, 0.5, -100)
+MainFrame.Size = UDim2.new(0, 200, 0, 250)
+MainFrame.Active = true
+MainFrame.Draggable = true -- Sürükleme özelliği
 
--- BURAYA SENİN GİRDİĞİN OYUNUN ID'SİNİ EKLEYELİM
-if GameID == 2753915549 or GameID == 444227216 or GameID == 7449423635 then
-    GameName = "Blox Fruits"
-elseif GameID == 6516141723 then
-    GameName = "Doors"
-elseif GameID == 8737899170 or GameID == 16498369169 then -- Pet Sim 99 yeni ID eklendi
-    GameName = "Pet Simulator 99"
-else
-    -- Eğer oyun listede yoksa, yine de genel hileleri açar
-    GameName = "Bilinmeyen Oyun (" .. tostring(GameID) .. ")"
+Title.Parent = MainFrame
+Title.Text = "🏮 AXIORE HUB"
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.TextColor3 = Color3.fromRGB(255, 0, 0) -- Kan Kırmızısı
+Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+
+SpeedBtn.Parent = MainFrame
+SpeedBtn.Text = "Hız Aktif Et (300)"
+SpeedBtn.Position = UDim2.new(0.1, 0, 0.3, 0)
+SpeedBtn.Size = UDim2.new(0.8, 0, 0, 40)
+SpeedBtn.Callback = function()
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 300
 end
-
-local Window = Rayfield:CreateWindow({
-   Name = "🏮 Axiore-Hub | " .. GameName,
-   LoadingTitle = "Samurai Akıllı Sistem v5.1",
-   LoadingSubtitle = "by Axiore",
-   ConfigurationSaving = {Enabled = true, FolderName = "AxioreHub", FileName = "AxioreConfig"},
-   KeySystem = false
-})
-
--- [[ GENEL HİLELER (HER OYUNDA ÇALIŞIR) ]] --
-local MainTab = Window:CreateTab("🏠 Ana Sayfa", 4483362458)
-MainTab:CreateSlider({
-   Name = "Hız", Range = {16, 500}, Increment = 5, CurrentValue = 16,
-   Callback = function(v) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v end,
-})
-
--- Eğer "Genel Sunucu" bile açılmıyorsa Rayfield kütüphanesi yüklenememiş demektir.
-Rayfield:Notify({Title = "Axiore Sistem", Content = GameName .. " Tespit Edildi!", Duration = 5})
