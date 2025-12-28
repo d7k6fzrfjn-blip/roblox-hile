@@ -11,8 +11,8 @@ local Window = Rayfield:CreateWindow({
    KeySystem = true,
    KeySettings = {
       Title = "Axiore VIP Giriş",
-      Subtitle = "Şifre: axiore-samurai-2024",
-      Key = {"axiore-samurai-2024"} 
+      Subtitle = "Şifre: axiore",
+      Key = {"axiore"} 
    }
 })
 
