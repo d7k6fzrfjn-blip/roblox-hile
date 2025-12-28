@@ -1,70 +1,55 @@
-local AvatarTab = Window:CreateTab("🎭 Avatar & Stil", 4483362458)
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-AvatarTab:CreateSection("Kıyafet Hırsızı")
-
-local targetPlayer = ""
-AvatarTab:CreateInput({
-   Name = "Oyuncu Adı Yaz (Kopyalamak İçin)",
-   PlaceholderText = "Örn: Axiore",
-   RemoveTextAfterFocusLost = false,
-   Callback = function(Text)
-      targetPlayer = Text
-   end,
+-- [[ MENÜYÜ OLUŞTUR (HİÇBİR ŞARTA BAĞLI DEĞİL) ]] --
+local Window = Rayfield:CreateWindow({
+   Name = "🏮 Axiore-Hub | UNSTOPPABLE",
+   LoadingTitle = "Samurai Master v9.5",
+   LoadingSubtitle = "by Axiore",
+   KeySystem = true,
+   KeySettings = {
+      Title = "VIP Giriş",
+      Subtitle = "Şifre: axiore-samurai-2024",
+      Key = {"axiore-samurai-2024"} 
+   }
 })
 
-AvatarTab:CreateButton({
-   Name = "Kıyafetlerini Kopyala (Outfit Steal)",
+-- [[ MM2 SEKMENİ ARTIK HEP BURADA! ]] --
+local MM2Tab = Window:CreateTab("🔪 MM2 & Savaş", 4483362458)
+
+MM2Tab:CreateButton({
+   Name = "ESP Aktif Et (Katil/Şerif Göster)",
    Callback = function()
-      local p1 = game.Players.LocalPlayer
-      local p2 = game.Players:FindFirstChild(targetPlayer)
-      
-      if p2 and p2.Character then
-         -- Mevcut aksesuarları sil
-         for _, v in pairs(p1.Character:GetChildren()) do
-            if v:IsA("Accessory") or v:IsA("Shirt") or v:IsA("Pants") then
-               v:Destroy()
-            end
-         end
-         -- Karşıdakinin kıyafetlerini kopyala
-         for _, v in pairs(p2.Character:GetChildren()) do
-            if v:IsA("Accessory") or v:IsA("Shirt") or v:IsA("Pants") then
-               local clone = v:Clone()
-               clone.Parent = p1.Character
-            end
-         end
-         Rayfield:Notify({Title = "Başarılı!", Content = targetPlayer .. " adlı oyuncunun stili çalındı!", Duration = 3})
-      else
-         Rayfield:Notify({Title = "Hata", Content = "Oyuncu bulunamadı!", Duration = 3})
-      end
+       -- MM2 ESP Kodu (Sadece butona basınca devreye girer)
+       for _, v in pairs(game.Players:GetPlayers()) do
+           if v.Character then
+               local hl = Instance.new("Highlight", v.Character)
+               hl.FillTransparency = 0.5
+               if v.Backpack:FindFirstChild("Knife") or v.Character:FindFirstChild("Knife") then
+                   hl.FillColor = Color3.new(1,0,0) -- KATİL KIRMIZI
+               elseif v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") then
+                   hl.FillColor = Color3.new(0,0,1) -- ŞERİF MAVİ
+               end
+           end
+       end
    end,
 })
 
-AvatarTab:CreateSection("Görünüm Efektleri")
-
+-- [[ AVATAR & STİL (KIYAFET HİLESİ) ]] --
+local AvatarTab = Window:CreateTab("🎭 Avatar", 4483362458)
 AvatarTab:CreateButton({
-   Name = "Karakter Parlatıcı (Neon Samurai)",
+   Name = "Karakteri Parlat (Neon)",
    Callback = function()
       for _, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-         if v:IsA("BasePart") then
-            v.Material = Enum.Material.Neon
-            v.Color = Color3.fromRGB(255, 0, 0)
-         end
+         if v:IsA("BasePart") then v.Material = Enum.Material.Neon v.Color = Color3.new(1,0,0) end
       end
    end,
 })
 
-AvatarTab:CreateToggle({
-   Name = "Gökkuşağı Karakter (RGB)",
-   CurrentValue = false,
-   Callback = function(Value)
-      _G.RGBChar = Value
-      while _G.RGBChar do
-         for _, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-            if v:IsA("BasePart") then
-               v.Color = Color3.fromHSV(tick()%5/5, 1, 1)
-            end
-         end
-         task.wait(0.1)
-      end
-   end,
+-- [[ GENEL AYARLAR ]] --
+local MainTab = Window:CreateTab("🏠 Ana Sayfa", 4483362458)
+MainTab:CreateSlider({
+   Name = "Hız Ayarı", Range = {16, 500}, Increment = 5, CurrentValue = 16,
+   Callback = function(v) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v end,
 })
+
+Rayfield:Notify({Title = "Sistem Hazır", Content = "Menü Başarıyla Yüklendi!", Duration = 5})
