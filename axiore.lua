@@ -1,51 +1,56 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "🏮 Axiore-Hub | FINAL GOD MODE",
-   LoadingTitle = "Samurai Operasyon Merkezi v4.0",
+   Name = "🏮 Axiore-Hub | Samurai Admin Edition",
+   LoadingTitle = "Axiore God Mode v4.5",
    LoadingSubtitle = "by Axiore",
    ConfigurationSaving = {Enabled = true, FolderName = "AxioreHub", FileName = "AxioreConfig"},
    KeySystem = false
 })
 
--- [[ 🚀 ADMIN KOMUTLARI (Infinite Yield) ]] --
+-- [[ 🛡️ GÜÇLÜ ADMIN ÖZELLİKLERİ ]] --
 local AdminTab = Window:CreateTab("📜 Admin", 4483362458)
-AdminTab:CreateButton({
-   Name = "Infinite Yield Yükle (Yüzlerce Komut)",
-   Callback = function()
-      loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
-   end,
-})
 
--- [[ 🔫 SAVAŞ & AIMBOT (Forsaken/Combat) ]] --
-local CombatTab = Window:CreateTab("🔫 Savaş", 4483362458)
-CombatTab:CreateToggle({
-   Name = "Silent Aim (Otomatik Nişan)",
+AdminTab:CreateToggle({
+   Name = "Noclip (Duvarlardan Geçme)",
    CurrentValue = false,
    Callback = function(Value)
-       _G.Aimbot = Value
-       game:GetService("RunService").RenderStepped:Connect(function()
-           if _G.Aimbot then
-               -- Buraya en yakın düşmana kilitlenme mantığı gelecek
+       _G.Noclip = Value
+       game:GetService("RunService").Stepped:Connect(function()
+           if _G.Noclip and game.Players.LocalPlayer.Character then
+               for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                   if v:IsA("BasePart") then v.CanCollide = false end
+               end
            end
        end)
    end,
 })
 
--- [[ 👁️ GÖRÜNÜRLÜK (ESP) ]] --
-local VisualsTab = Window:CreateTab("👁️ Görünürlük", 4483362458)
-VisualsTab:CreateToggle({
-   Name = "Oyuncu İsimlerini Göster",
-   CurrentValue = false,
-   Callback = function(Value)
-       -- ESP Kodları buraya
+AdminTab:CreateButton({
+   Name = "Görünmezlik (Invisibility)",
+   Callback = function()
+       local char = game.Players.LocalPlayer.Character
+       if char then
+           for _, v in pairs(char:GetDescendants()) do
+               if v:IsA("BasePart") or v:IsA("Decal") then v.Transparency = 1 end
+           end
+       end
+       Rayfield:Notify({Title = "Görünmezlik!", Content = "Artık kimse seni göremez.", Duration = 3})
    end,
 })
 
--- [[ 🎮 OYUN SEKMELERİ (Blox Fruits / Doors / Pet Sim) ]] --
-local GamesTab = Window:CreateTab("🎮 Oyunlar", 4483362458)
+AdminTab:CreateButton({
+   Name = "Altına Platform Koy (Platform)",
+   Callback = function()
+       local p = Instance.new("Part", game.Workspace)
+       p.Size = Vector3.new(10, 1, 10)
+       p.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -4, 0)
+       p.Anchored = true
+   end,
+})
 
-GamesTab:CreateSection("Blox Fruits")
+-- [[ 🌊 BLOX FRUITS & OYUNLAR ]] --
+local GamesTab = Window:CreateTab("🎮 Oyunlar", 4483362458)
 GamesTab:CreateButton({
    Name = "Meyveleri Işınla (Fruit Snatcher)",
    Callback = function()
@@ -57,40 +62,30 @@ GamesTab:CreateButton({
    end,
 })
 
-GamesTab:CreateSection("Doors")
-GamesTab:CreateToggle({
-   Name = "Yaratık Gelince Uyar",
-   CurrentValue = false,
-   Callback = function(Value)
-       -- Doors uyarısı
-   end,
-})
-
--- [[ ✈️ HAREKET & UÇMA ]] --
+-- [[ ✈️ HAREKET (SPEED & FLY) ]] --
 local MoveTab = Window:CreateTab("✈️ Hareket", 4483362458)
 MoveTab:CreateSlider({
-   Name = "Işık Hızı", Range = {16, 1000}, Increment = 10, CurrentValue = 16,
+   Name = "Hız (WalkSpeed)", Range = {16, 500}, Increment = 5, CurrentValue = 16,
    Callback = function(v) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v end,
 })
 
 local flying = false
+local speed = 50
 MoveTab:CreateToggle({
-   Name = "Samurai Flight (Uçuş)",
+   Name = "Samurai Flight (Fly)",
    CurrentValue = false,
    Callback = function(Value)
       flying = Value
       local root = game.Players.LocalPlayer.Character.HumanoidRootPart
       game:GetService("RunService").Heartbeat:Connect(function()
-          if flying then root.Velocity = game.Workspace.CurrentCamera.CFrame.LookVector * 100 end
+          if flying then root.Velocity = game.Workspace.CurrentCamera.CFrame.LookVector * speed end
       end)
    end,
 })
 
--- [[ 🛠️ AYARLAR ]] --
-local SettingsTab = Window:CreateTab("⚙️ Ayarlar", 4483362458)
-SettingsTab:CreateButton({
-   Name = "Menüyü Kapat (Destroy)",
-   Callback = function() Rayfield:Destroy() end,
+MoveTab:CreateSlider({
+   Name = "Uçuş Hızı", Range = {10, 300}, Increment = 5, CurrentValue = 50,
+   Callback = function(v) speed = v end,
 })
 
-Rayfield:Notify({Title = "Axiore v4.0 YÜKLENDİ", Content = "Durdurulamaz güç elinde!", Duration = 5})
+Rayfield:Notify({Title = "Axiore v4.5 AKTİF", Content = "Admin özellikleri eklendi!", Duration = 5})
